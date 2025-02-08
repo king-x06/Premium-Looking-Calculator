@@ -8,29 +8,85 @@
     <div id="Calculator">
         <input type="text" id="display" readonly>
         <div class="button_container">
-            <button class="button" onclick="currentDisplay = ''; document.querySelector('#display').value = currentDisplay">C</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '1'; document.querySelector('#display').value = currentDisplay">1</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '2'; document.querySelector('#display').value = currentDisplay">2</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '+'; document.querySelector('#display').value = currentDisplay">+</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '3'; document.querySelector('#display').value = currentDisplay">3</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '4'; document.querySelector('#display').value = currentDisplay">4</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '-'; document.querySelector('#display').value = currentDisplay">-</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '5'; document.querySelector('#display').value = currentDisplay">5</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '6'; document.querySelector('#display').value = currentDisplay">6</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '*'; document.querySelector('#display').value = currentDisplay">*</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '7'; document.querySelector('#display').value = currentDisplay">7</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '8'; document.querySelector('#display').value = currentDisplay">8</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '/'; document.querySelector('#display').value = currentDisplay">/</button>
-            <button class="button" onclick="let result = eval(currentDisplay); currentDisplay = result; document.querySelector('#display').value = currentDisplay">=</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '9'; document.querySelector('#display').value = currentDisplay">9</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '0'; document.querySelector('#display').value = currentDisplay">0</button>
-            <button class="button" onclick="currentDisplay = currentDisplay + '.'; document.querySelector('#display').value = currentDisplay">.</button>
+            <!-- Number buttons (left side) -->
+            <button class="button" onclick="clearDisplay()">C</button>
+            <button class="button" onclick="appendToDisplay('7')">7</button>
+            <button class="button" onclick="appendToDisplay('8')">8</button>
+            <button class="button" onclick="appendToDisplay('9')">9</button>
+            <button class="button" onclick="appendToDisplay('4')">4</button>
+            <button class="button" onclick="appendToDisplay('5')">5</button>
+            <button class="button" onclick="appendToDisplay('6')">6</button>
+            <button class="button" onclick="appendToDisplay('1')">1</button>
+            <button class="button" onclick="appendToDisplay('2')">2</button>
+            <button class="button" onclick="appendToDisplay('3')">3</button>
+            <button class="button" onclick="appendToDisplay('0')">0</button>
+            <button class="button" onclick="appendToDisplay('.')">.</button>
+
+            <!-- Sign buttons and backspace (right side) -->
+            <button class="button operator" onclick="backspace()">←</button>
+            <button class="button operator" onclick="appendToDisplay('+')">+</button>
+            <button class="button operator" onclick="appendToDisplay('-')">-</button>
+            <button class="button operator" onclick="appendToDisplay('*')">*</button>
+            <button class="button operator" onclick="appendToDisplay('/')">/</button>
+            <button class="button operator" onclick="calculateResult()">=</button>
         </div>
     </div>
 
     <script>
         let currentDisplay = '';
-        document.querySelector('#display').value = currentDisplay;
+
+        // Function to update the display
+        function updateDisplay() {
+            document.querySelector('#display').value = currentDisplay;
+        }
+
+        // Function to append input to the display
+        function appendToDisplay(value) {
+            // Prevent multiple operators in a row
+            const lastChar = currentDisplay[currentDisplay.length - 1];
+            const isOperator = ['+', '-', '*', '/'].includes(lastChar);
+            const isNewOperator = ['+', '-', '*', '/'].includes(value);
+
+            if (isOperator && isNewOperator) {
+                return; // Do nothing if the last character is an operator and the new input is also an operator
+            }
+
+            // Prevent multiple decimal points in a single number
+            if (value === '.') {
+                const lastNumber = currentDisplay.split(/[\+\-\*\/]/).pop(); // Get the last number
+                if (lastNumber.includes('.')) {
+                    return; // Do nothing if the last number already contains a decimal point
+                }
+            }
+
+            currentDisplay += value;
+            updateDisplay();
+        }
+
+        // Function to clear the display
+        function clearDisplay() {
+            currentDisplay = '';
+            updateDisplay();
+        }
+
+        // Function to remove the last character
+        function backspace() {
+            currentDisplay = currentDisplay.slice(0, -1);
+            updateDisplay();
+        }
+
+        // Function to calculate the result
+        function calculateResult() {
+            try {
+                currentDisplay = eval(currentDisplay).toString();
+            } catch (error) {
+                currentDisplay = 'Error';
+            }
+            updateDisplay();
+        }
+
+        // Initialize display
+        updateDisplay();
     </script>
 </body>
 </html>
