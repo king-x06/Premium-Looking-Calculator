@@ -22,7 +22,7 @@ A simple yet stylish calculator built with **HTML, CSS, and JavaScript**. Design
 ## 🛠 How to Run  
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/your-username/Premium-Calculator.git
+   git clone https://github.com/king-x06/Premium-Calculator.git
 
 	2.	Open index.html in a browser.
 
